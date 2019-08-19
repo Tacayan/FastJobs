@@ -1,0 +1,57 @@
+::-webkit-scrollbar-track {
+    background-color: #F4F4F4;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    background: #F4F4F4;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #dad7d7;
+}
+
+body{
+    /* background: linear-gradient(90deg, #424242, #87CEFF, #424242); */
+    background-image: url('../kkk.jpg');
+    background-repeat: no-repeat;
+    background-size: 100%, 100%;
+    background-attachment: fixed;
+}
+
+nav, footer{
+    /* background: linear-gradient(90deg, #87ceff, #B0E2FF, #87CEFF); */
+    opacity: 0.9;
+}
+
+footer:not(.footer){
+    bottom: 0px;
+    width: 100%;
+    position: absolute;
+}
+
+.card{
+    /* background: linear-gradient(90deg, #87ceff, rgb(179, 214, 247), #87CEFF); */
+    opacity: 0.9;
+}
+
+.card-panel{
+    opacity: 0.9;
+}
+
+.btn{
+    opacity: 0.9;
+}
+
+.input-field input:focus + label:not(.profile) {
+    color: #90caf9 !important;
+}  
+
+.row .input-field input:focus:not(.profile) {
+    border-bottom: 1px solid #90caf9 !important;
+    box-shadow: 0 1px 0 0 #90caf9 !important
+}
+
+.material-icons.active {
+    color: #90caf9 !important;
+}
