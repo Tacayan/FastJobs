@@ -2,6 +2,8 @@
 // require 'database/connection.php';
 // require 'class/authenticate.class.php';
 
+use function PHPSTORM_META\expectedArguments;
+
 class announcement
 {
 
@@ -35,7 +37,7 @@ class announcement
             $_SESSION['announcement'] = $this->getErros();
             header('Location: profile.php');
         } else {
-            $authenticate = new authenticate();
+            $authenticate = new authenticate($_COOKIE['token']);
             $id = $authenticate->getID();
             $user = $authenticate->getUser();
             $connection = GetConnection();
@@ -61,8 +63,17 @@ class announcement
         $stmt = $connection->prepare('SELECT * FROM announcement ORDER BY id DESC');
         $stmt->bindParam(':id', $id);
         $stmt->execute();
+        $announcement = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        while ($announcement = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (!count($announcement)) {
+            echo "<div class='card col s12 colorBack'>
+            <div class='card-content black-text'>
+                <span class='card-title center'>Nada a exibir</span>
+            </div>
+        </div>";
+        }
+
+        foreach ($announcement as $announcement) {
             $stmtWhile = $connection->prepare('SELECT userId FROM announcementCandidates WHERE announcementId = :announcementId AND userId = :userId');
             $stmtWhile->bindParam(':announcementId', $announcement["id"]);
             $stmtWhile->bindParam(':userId', $userId);
@@ -71,13 +82,13 @@ class announcement
                 echo '<div class="card "> 
             <div class="card-content black-text yellow lighten-3"> 
             <div class="chip right">Função- anuncio</div> 
-            <span class="card-title light"> ' . $announcement["title"] . $announcement["id"] . ' </span> 
+            <span class="card-title light"> ' . $announcement["title"] . ' </span> 
             <p class="" style="text-align: justify;"> ' .  $announcement["description"] . ' </p> 
             <hr>
             <p class="title" style="text-align: justify;">' .  $announcement["address"] . ' </p>
             <p class="green-text text-darken-3">R$ ' . $announcement["payment"] . '</p> </div> 
             <div class="card-action col s12 grey lighten-3"> 
-            <a href="applying.php/?announcement=' . $announcement["id"] . '&user=' . $userId . ' " class="btn-flat black-text left col s12 hoverable disabled">Você já se candidatou a vaga</a>
+            <a href="applyingAnnouncement.php/?announcement=' . $announcement["id"] . '&user=' . $userId . ' " class="btn-flat black-text left col s12 hoverable disabled">Você já se candidatou a vaga</a>
             <a href="" class="btn-flat grey-text text-darken-3 col s12">Visitar perfil de ' . $announcement["user"] . '</a> <br> 
             </div> 
             </div>
@@ -90,15 +101,15 @@ class announcement
                 echo '<div class="card "> 
             <div class="card-content black-text white"> 
             <div class="chip right">Função- anuncio</div> 
-            <span class="card-title light"> ' . $announcement["title"] . $announcement["id"] . ' </span> 
+            <span class="card-title light"> ' . $announcement["title"] . ' </span> 
             <p class="" style="text-align: justify;"> ' .  $announcement["description"] . ' </p> 
             <hr>
             <p class="title" style="text-align: justify;">' .  $announcement["address"] . ' </p>
             <p class="green-text text-darken-3">R$ ' . $announcement["payment"] . '</p> </div> 
             <div class="card-action col s12 grey lighten-3"> 
-            <a href="applying.php/?announcement=' . $announcement["id"] . '&user=' . $userId . ' " class="btn-flat black-text left col s12 hoverable">Candidatar-se a oferta</a>
+            <a href="applyingAnnouncement.php/?announcement=' . $announcement["id"] . '&user=' . $userId . ' " class="btn-flat black-text left col s12 hoverable">Candidatar-se a oferta</a>
             <a href="" class="btn-flat grey-text text-darken-3 col s12">Visitar perfil de ' . $announcement["user"] . '</a> <br> 
-            </div> 
+            </div>
             </div>
             <br>
             <br>
@@ -109,16 +120,89 @@ class announcement
         }
     }
 
-    public function showsannouncementProfile()
+    public function showsAnnouncementUser($id)
     {
-        $authenticate = new authenticate();
-        $id = $authenticate->getID();
+        $connection = GetConnection();
+
+        $stmt = $connection->prepare('SELECT * FROM announcement WHERE codUser = :id ORDER BY id DESC');
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $announcement = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!count($announcement)) {
+            echo "<div class='card col s12 colorBack'>
+            <div class='card-content black-text'>
+                <span class='card-title center'>Nada a exibir</span>
+            </div>
+        </div>";
+        }
+
+        foreach ($announcement as $announcement) {
+
+            $stmtWhile = $connection->prepare('SELECT userId FROM announcementCandidates WHERE announcementId = :announcementId AND userId = :userId');
+            $stmtWhile->bindParam(':announcementId', $announcement["id"]);
+            $stmtWhile->bindParam(':userId', $userId);
+            $stmtWhile->execute();
+            if ($stmtWhile->fetch(PDO::FETCH_ASSOC)) {
+                echo '<div class="card "> 
+            <div class="card-content black-text yellow lighten-3"> 
+            <div class="chip right">Função- anuncio</div> 
+            <span class="card-title light"> ' . $announcement["title"] . ' </span> 
+            <p class="" style="text-align: justify;"> ' .  $announcement["description"] . ' </p> 
+            <hr>
+            <p class="title" style="text-align: justify;">' .  $announcement["address"] . ' </p>
+            <p class="green-text text-darken-3">R$ ' . $announcement["payment"] . '</p> </div> 
+            <div class="card-action col s12 grey lighten-3"> 
+            <a href="applyingAnnouncement.php/?announcement=' . $announcement["id"] . '&user=' . $userId . ' " class="btn-flat black-text left col s12 hoverable disabled">Você já se candidatou a vaga</a>
+            <a href="" class="btn-flat grey-text text-darken-3 col s12">Visitar perfil de ' . $announcement["user"] . '</a> <br> 
+            </div> 
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>';
+            } else {
+                echo '<div class="col s12">
+            <div class="card "> 
+            <div class="card-content black-text white"> 
+            <div class="chip right">Função- anuncio</div> 
+            <span class="card-title light"> ' . $announcement["title"] . ' </span> 
+            <p class="" style="text-align: justify;"> ' .  $announcement["description"] . ' </p> 
+            <hr>
+            <p class="title" style="text-align: justify;">' .  $announcement["address"] . ' </p>
+            <p class="green-text text-darken-3">R$ ' . $announcement["payment"] . '</p> </div> 
+            <div class="card-action col s12 grey lighten-3"> 
+            <a href="../applyingAnnouncement.php/?announcement=' . $announcement["id"] . '&user=' . $userId . ' " class="btn-flat black-text left col s12 hoverable">Candidatar-se a oferta</a>
+            </div>
+            </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>';
+            }
+        }
+    }
+
+    public function showsannouncementProfile($id)
+    {
         $connection = GetConnection();
         $stmt = $connection->prepare('SELECT * FROM announcement WHERE codUser = :codUser ORDER BY id DESC');
         $stmt->bindParam(':codUser', $id);
         $stmt->execute();
+        $announcement = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        while ($announcement = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (!count($announcement)) {
+            echo "<div class='card col s12 colorBack'>
+            <div class='card-content black-text'>
+                <span class='card-title center'>Nada a exibir</span>
+            </div>
+        </div>";
+        }
+
+        foreach ($announcement as $announcement) {
             echo '<div class="col s12">
             <div class="card "> 
             <div class="card-content black-text white"> 
@@ -140,8 +224,8 @@ class announcement
             <br>
             <br>';
         }
-        // $this->showsCandidate("35");
     }
+
 
     // public function showsCandidate($announcementId)
     // {
@@ -158,6 +242,18 @@ class announcement
 
         if ($stmt->execute()) {
             $_SESSION['notice'] = 'Você se candidatou a vaga';
+            header('Location: ../home.php');
+        }
+    }
+
+    public function deletingAnnouncement($id)
+    {
+        $connection = GetConnection();
+        $stmt = $connection->prepare('DELETE FROM announcement WHERE id = :id');
+        $stmt->bindParam(':id', $id);
+
+        if ($stmt->execute()) {
+            $_SESSION['notice'] = 'Anúncio Excluído';
             header('Location: ../home.php');
         }
     }

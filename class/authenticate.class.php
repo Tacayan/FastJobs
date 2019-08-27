@@ -113,11 +113,11 @@ class authenticate
         }
     }
 
-    public function __construct()
+    public function __construct($token)
     {
         @session_start();
 
-        $this->setToken(substr(base64_decode($_COOKIE['token']), 0, 32));
+        $this->setToken(substr(base64_decode($token), 0, 32));
         $tokenVar = $this->getToken();
 
         $connection = getConnection();

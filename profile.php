@@ -1,7 +1,7 @@
 <?php
 require 'class/authenticate.class.php';
 require 'class/announcement.class.php';
-$authenticate = new authenticate();
+$authenticate = new authenticate($_COOKIE['token']);
 
 @session_start();
 ?>
@@ -141,14 +141,14 @@ $authenticate = new authenticate();
                 <ul class='collection'>
 
                     <li class='collection-item avatar'>
-                        <img src='https://instagram.fcgh11-1.fna.fbcdn.net/vp/7fff84edb5308dba1bcf8c8c8666fdea/5D626459/t51.2885-19/s150x150/56739396_333393914033790_3678874337835745280_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net' alt='' class='circle'>
+                        <img src='https://instagram.fcgh11-1.fna.fbcdn.net/vp/fe6aa5337b36bce7ae8e417d65b600d8/5E05F285/t51.2885-19/s150x150/67727803_408078650067138_1975367184414670848_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net' alt='' class='circle'>
                         <span class='title'>Cintia Barbosa</span>
                         <p><i class='material-icons tiny yellow-text'>grade</i>5.01
                         </p>
                     </li>
 
                     <li class='collection-item avatar'>
-                        <img src='https://instagram.faep12-1.fna.fbcdn.net/vp/d42a494fc2402d8bd8c0778db0ee5e0c/5DB92B0D/t51.2885-19/s150x150/65556681_2344669842480134_7219431796524449792_n.jpg?_nc_ht=instagram.faep12-1.fna.fbcdn.net' alt='' class='circle'>
+                        <img src='https://instagram.fcgh11-1.fna.fbcdn.net/vp/79ce45847126e1776511183de150d650/5E050D07/t51.2885-19/s150x150/66673162_373444230236014_7726763035859091456_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net' alt='' class='circle'>
                         <span class='title'>Tatsuya ♥</span>
                         <p><i class='material-icons tiny yellow-text'>grade</i>5.01
                         </p>
@@ -186,7 +186,7 @@ $authenticate = new authenticate();
         <div class='col s7'>
 
             <div class='card-panel col s12 colorBack' style='background:#90caf9'><br>
-                <div class='center'><img id='imagem' src='fotos/comia.jpg' class='circle z-depth-5' height='200' width='200'></div>
+                <div class='center'><img id='imagem' src='users/photos/comia.jpg' class='circle z-depth-5' height='200' width='200'></div>
                 <div class='card z-depth-5'><br>
                     <h4 class='light center'> <?php echo $authenticate->getUser(); ?> </h4><br>
                     <h6 class='light center col s6'> <?php echo $authenticate->getEmail(); ?> </h6>
@@ -245,8 +245,9 @@ $authenticate = new authenticate();
 
             <?php
 
+            $id = $authenticate->getId();
             $announcement = new announcement();
-            $announcement->showsannouncementProfile();
+            $announcement->showsannouncementProfile($id);
 
             ?>
 
