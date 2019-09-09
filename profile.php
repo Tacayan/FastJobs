@@ -47,12 +47,30 @@ $authenticate = new authenticate($_COOKIE['token']);
 
     <div id='edit' class='modal'>
         <div class='modal-content'>
-            <h4>Perfil</h4>
+            <form method="post" action="updatingAccount.php" enctype="multipart/form-data">
+                <h4>Perfil</h4>
+
+                <div class='input-field col s612'>
+                    <!-- <i class="material-icons prefix">person</i>
+                    <input id='name' type='text' class='profile' name='name'> -->
+                    <!-- <label for='name' class='profile'>Nome</label> -->
+                </div>
+
+                <div class="file-field input-field">
+                    <div class="btn colorBack black-text">
+                        <span>Foto de perfil</span>
+                        <input name="photo" type="file" multiple>
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Somente arquivos JPG/PNG/BMP">
+                    </div>
+                </div>
 
         </div>
         <div class='modal-footer'>
             <a href='#!' class='modal-close btn-flat'>Fechar</a>
-            <button href='#!' type='submit' class='btn-flat'>Salvar</a>
+            <button type='submit' class='btn-flat'>Salvar</a>
+                </form>
         </div>
     </div>
 
@@ -69,9 +87,9 @@ $authenticate = new authenticate($_COOKIE['token']);
     <script type='text/javascript'>
         window.onload = function() {
             <?php if (@$_SESSION['announcement'] != '') { ?>
-            M.toast({
-                html: '<?php echo $_SESSION['announcement'] ?>'
-            });
+                M.toast({
+                    html: '<?php echo $_SESSION['announcement'] ?>'
+                });
             <?php } ?>
 
             var colorThief = new ColorThief();
@@ -186,14 +204,14 @@ $authenticate = new authenticate($_COOKIE['token']);
         <div class='col s7'>
 
             <div class='card-panel col s12 colorBack' style='background:#90caf9'><br>
-                <div class='center'><img id='imagem' src='users/photos/comia.jpg' class='circle z-depth-5' height='200' width='200'></div>
-                <div class='card z-depth-5'><br>
+                <div class='center'><img id='imagem' src='<?php echo $authenticate->getPhoto(); ?>' class='circle z-depth-5' height='200' width='200'></div>
+                <div class='card'><br>
                     <h4 class='light center'> <?php echo $authenticate->getUser(); ?> </h4><br>
                     <h6 class='light center col s6'> <?php echo $authenticate->getEmail(); ?> </h6>
                     <h6 class='light center col s6'> <?php echo $authenticate->getTelephone(); ?> </h6><br><br><br>
                 </div>
 
-                <a href='#edit' class='btn white right black-text modal-trigger'>Editar Perfil<i class='left material-icons tiny colorColor'>edit</i></a><br><br>
+                <a href='#edit' class='btn white right black-text modal-trigger'>Editar Perfil<i class='left material-icons tiny colorCoBack'>edit</i></a><br><br>
             </div>
 
             <div class='card col s12'>
@@ -219,10 +237,10 @@ $authenticate = new authenticate($_COOKIE['token']);
                         <div class='input-field col s12 profile'>
                             <input id='description' type='text' class='profile' name='description'>
                             <label for='description' class='profile'>Descrição do trabalho</label>
-                            <button class='btn white right black-text' type='submit'>Criar anúncio<i class='left material-icons tiny  colorColor'>create</i></a><br><br>
+                            <button class='btn white right black-text' type='submit'>Criar anúncio<i class='left material-icons tiny colorColor'>create</i></a><br><br>
                         </div>
 
-                        <div class="input-field col s4 hide">
+                        <!-- <div class="input-field col s4">
                             <select>
                                 <optgroup label="Reforma">
                                     <option value="1">Pedreiro</option>
@@ -236,7 +254,7 @@ $authenticate = new authenticate($_COOKIE['token']);
                             </select>
                             <label>Tipo de empregado</label>
                             <button class='btn white right black-text' type='submit'>Criar anúncio<i class='left material-icons tiny' id='creatingAd'>create</i></a><br><br>
-                        </div>
+                        </div> -->
 
                     </form>
 
@@ -331,9 +349,18 @@ $authenticate = new authenticate($_COOKIE['token']);
             $('select').formSelect();
         });
 
-        $(document).ready(function() {
-            $('.tap-target').tapTarget();
-        });
+        if (!localStorage.getItem('viewed')) {
+            $(document).ready(function() {
+                $('.tap-target').tapTarget();
+            });
+        }
+
+        // if (localStorage.getItem('photoChanged')){
+        //     alert('kkkkktrouxa');
+        //     localStorage.removeItem('photoChanged');
+        // }
+
+        localStorage.setItem('viewed', 'TRUE');
     </script>
 
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>

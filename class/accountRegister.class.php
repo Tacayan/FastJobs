@@ -1,5 +1,6 @@
 <?php
-// require 'database/connection.php';
+ob_start();
+require 'resize-class/resize-class.php';
 
 class accountRegister
 {
@@ -44,6 +45,16 @@ class accountRegister
     public function getName()
     {
         return $this->name;
+    }
+
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+    }
+
+    public function getPhoto()
+    {
+        return $this->photo;
     }
 
 
@@ -100,7 +111,7 @@ class accountRegister
     public function accountShowing($id)
     {
         $connection = GetConnection();
-        $stmt = $connection->prepare('SELECT name, email, telephone FROM user WHERE id = :id');
+        $stmt = $connection->prepare('SELECT name, email, telephone, photo FROM user WHERE id = :id');
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -108,6 +119,45 @@ class accountRegister
         $this->setName($user['name']);
         $this->setEmail($user['email']);
         $this->setTelephone($user['telephone']);
+        $this->setPhoto($user['photo']);
+    }
+
+    public function updateAccount($userId)
+    {
+        if (($_FILES['photo']['name']) && $_FILES['photo']['error'] == 0) {
+            $name_tmp = $_FILES['photo']['tmp_name'];
+            $name = $_FILES['photo']['name'];
+            list($width, $height) = getimagesize($name_tmp);
+
+            if (($width <= 250) and ($height <= 250)) {
+                $_SESSION['announcement'] = 'Imagem muito pequena';
+                header('Location: profile.php');
+            } else {
+                $extension = pathinfo($name, PATHINFO_EXTENSION);
+                $name = md5(uniqid(time())) . '.' . $extension;
+                $destination = 'users/photos/' . $name;
+
+                if (!strstr('.jpg; .jpeg; .gif; .png', $extension)) {
+                    header('Location: profile.php');
+                } else {
+                    move_uploaded_file($name_tmp, $destination);
+                    $connection = GetConnection();
+                    $stmt = $connection->prepare('UPDATE user SET photo = :photo WHERE id = :id');
+                    $stmt->bindParam(':photo', $destination);
+                    $stmt->bindParam(':id', $userId);
+                    $stmt->execute();
+                    echo "<script type='text/javascript>
+                        localStorage.setItem('photoChanged', 'TRUE');
+                    </script>";
+                    $_SESSION['photoChanged'] = true;
+                    header('Location: profile.php');
+                }
+            }
+
+            $resizeObj = new resize($destination);
+            $resizeObj->resizeImage(500, 500, 'crop');
+            $resizeObj->saveImage($destination, 100);
+        }
     }
 
     public function __construct()

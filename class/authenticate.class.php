@@ -77,6 +77,16 @@ class authenticate
         return $this->id;
     }
 
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+    }
+
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
     public function authentication($sit, $tokenVar)
     {
 
@@ -92,7 +102,7 @@ class authenticate
         }
 
         $connection = getConnection();
-        $stmt = $connection->prepare('SELECT name, email, telephone, id FROM user WHERE token = :token');
+        $stmt = $connection->prepare('SELECT name, email, telephone, id, photo FROM user WHERE token = :token');
         $stmt->bindParam(':token', $tokenVar);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -101,6 +111,7 @@ class authenticate
         $this->setEmail($user['email']);
         $this->setTelephone($user['telephone']);
         $this->setID($user['id']);
+        $this->setPhoto($user['photo']);
     }
 
     public function checkLogin($sit)

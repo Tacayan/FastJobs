@@ -89,7 +89,7 @@ class announcement
             <p class="green-text text-darken-3">R$ ' . $announcement["payment"] . '</p> </div> 
             <div class="card-action col s12 grey lighten-3"> 
             <a href="applyingAnnouncement.php/?announcement=' . $announcement["id"] . '&user=' . $userId . ' " class="btn-flat black-text left col s12 hoverable disabled">Você já se candidatou a vaga</a>
-            <a href="" class="btn-flat grey-text text-darken-3 col s12">Visitar perfil de ' . $announcement["user"] . '</a> <br> 
+            <a href="user.php/?id=' .$announcement["codUser"]. '" class="btn-flat grey-text text-darken-3 col s12">Visitar perfil de ' . $announcement["user"] . '</a> <br> 
             </div> 
             </div>
             <br>
@@ -108,7 +108,7 @@ class announcement
             <p class="green-text text-darken-3">R$ ' . $announcement["payment"] . '</p> </div> 
             <div class="card-action col s12 grey lighten-3"> 
             <a href="applyingAnnouncement.php/?announcement=' . $announcement["id"] . '&user=' . $userId . ' " class="btn-flat black-text left col s12 hoverable">Candidatar-se a oferta</a>
-            <a href="" class="btn-flat grey-text text-darken-3 col s12">Visitar perfil de ' . $announcement["user"] . '</a> <br> 
+            <a href="user.php/?id=' .$announcement["codUser"]. '" class="btn-flat grey-text text-darken-3 col s12">Visitar perfil de ' . $announcement["user"] . '</a> <br> 
             </div>
             </div>
             <br>

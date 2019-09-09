@@ -184,7 +184,7 @@ $showing->accountShowing($_GET['id']);
 		<div class='col s7'>
 
 			<div class='card-panel col s12 colorBack' style='background:#90caf9'><br>
-				<div class='center'><img id='imagem' src='../users/photos/comia.jpg' class='circle z-depth-5' height='200' width='200'></div>
+				<div class='center'><img id='imagem' src='../<?php echo $showing->getPhoto(); ?>' class='circle z-depth-5' height='200' width='200'></div>
 				<div class='card z-depth-5'><br>
 					<h4 class='light center'> <?php echo $showing->getName(); ?> </h4><br>
 					<h6 class='light center col s6'> <?php echo $showing->getEmail(); ?> </h6>
@@ -326,9 +326,13 @@ $showing->accountShowing($_GET['id']);
 			$('select').formSelect();
 		});
 
-		$(document).ready(function() {
-			$('.tap-target').tapTarget();
-		});
+		if (!localStorage.getItem('viewed')) {
+			$(document).ready(function() {
+				$('.tap-target').tapTarget();
+			});
+		}
+
+		localStorage.setItem('viewed', 'true');
 	</script>
 
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
