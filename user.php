@@ -1,11 +1,12 @@
 <?php
-require 'class/authenticate.class.php';
-require 'class/accountRegister.class.php';
-require 'class/announcement.class.php';
+require 'class/Authenticate.class.php';
+require 'class/AccountLogin.class.php';
+require 'class/Announcement.class.php';
 
-$authenticate = new authenticate($_COOKIE['token']);
+$authenticate = new Authenticate($_COOKIE['token']);
+$codUser = $authenticate->getId();
 
-$showing = new accountRegister();
+$showing = new AccountLogin();
 
 $showing->accountShowing($_GET['id']);
 ?>
@@ -242,7 +243,7 @@ $showing->accountShowing($_GET['id']);
 			<?php
 
 			$announcement = new announcement();
-			$announcement->showsannouncementUser($_GET['id']);
+			$announcement->showsannouncementUser($_GET['id'], $codUser);
 
 			?>
 

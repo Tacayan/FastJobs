@@ -1,9 +1,9 @@
 <?php
 
-require 'class/authenticate.class.php';
-require 'class/announcement.class.php';
+require 'class/Authenticate.class.php';
+require 'class/Announcement.class.php';
 
-$authenticate = new authenticate($_COOKIE['token']);
-$announcement = new announcement();
+$authenticate = new Authenticate($_COOKIE['token']);
+$announcement = new Announcement();
 
 $announcement -> deletingAnnouncement($_GET['id']);

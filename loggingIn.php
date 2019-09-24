@@ -1,6 +1,7 @@
 <?php
-    require 'class/accountLogin.class.php';
+require 'database/connection.php';
+require 'class/AccountLogin.class.php';
 
-    $accountLogin = new accountLogin();
+$accountLogin = new AccountLogin();
 
-    $accountLogin -> loggingIn();
+$accountLogin->loggingIn();

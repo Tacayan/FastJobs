@@ -42,7 +42,7 @@ require 'class/authenticate.class.php';
     session_start();
 
     echo @$_SESSION['fastLogin'];
-    echo @$_SESSION['registration'];
+    echo @$_SESSION['notice'];
 
     if (isset($_SESSION['error'])) {
         $error = $_SESSION['error'];
@@ -52,11 +52,11 @@ require 'class/authenticate.class.php';
                 <?php echo $erro; ?>
                 <i class="close material-icons white-text">close</i>
             </div><?php
-                }
-            }
+                        }
+                    }
 
-            unset($_SESSION['error'], $error, $erro);
-            ?>
+                    unset($_SESSION['error'], $_SESSION['notice'], $error, $erro);
+                    ?>
 </center><br>
 
 <footer class="page-footer blue lighten-3 grey-text text-darken-4">

@@ -1,9 +1,9 @@
 <?php
 require 'class/authenticate.class.php';
-require 'class/accountRegister.class.php';
+require 'class/accountLogin.class.php';
 
 $authenticate = new authenticate($_COOKIE['token']);
-$userId = $authenticate->getID();
-$updating = new accountRegister();
+$codUser = $authenticate->getId();
 
-$updating->updateAccount($userId);
+$updating = new AccountLogin();
+$updating->updateAccount($codUser);

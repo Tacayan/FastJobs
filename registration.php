@@ -1,6 +1,7 @@
-<?php 
-    require 'class/accountRegister.class.php';
+<?php
+require 'database/connection.php';
+require 'class/accountLogin.class.php';
 
-    $accountRegister = new accountRegister();
+$accountRegister = new AccountLogin();
 
-    $accountRegister -> registration();
+$accountRegister->registration();

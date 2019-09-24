@@ -11,6 +11,50 @@ $authenticate = new authenticate($_COOKIE['token']);
 
 <head>
 
+    <script>
+        function lightOrDark(color) {
+
+            // Variables for red, green, blue values
+            var r, g, b, hsp;
+
+            // Check the format of the color, HEX or RGB?
+            if (color.match(/^rgb/)) {
+
+                // If HEX --> store the red, green, blue values in separate variables
+                color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/);
+
+                r = color[1];
+                g = color[2];
+                b = color[3];
+            } else {
+
+                // If RGB --> Convert it to HEX: http://gist.github.com/983661
+                color = +("0x" + color.slice(1).replace(
+                    color.length < 5 && /./g, '$&$&'));
+
+                r = color >> 16;
+                g = color >> 8 & 255;
+                b = color & 255;
+            }
+
+            // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+            hsp = Math.sqrt(
+                0.299 * (r * r) +
+                0.587 * (g * g) +
+                0.114 * (b * b)
+            );
+
+            // Using the HSP value, determine whether the color is light or dark
+            if (hsp > 127.5) {
+
+                return 'light';
+            } else {
+
+                return 'dark';
+            }
+        }
+    </script>
+
     <style>
         .input-field input:focus+label {
             color: #000 !important;
@@ -74,16 +118,6 @@ $authenticate = new authenticate($_COOKIE['token']);
         </div>
     </div>
 
-    <div id="candidatos35" class="modal bottom-sheet">
-        <div class="modal-content">
-            <h4>Modal Header</h4>
-            <p>A bunch of text</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-        </div>
-    </div>
-
     <script type='text/javascript'>
         window.onload = function() {
             <?php if (@$_SESSION['announcement'] != '') { ?>
@@ -96,6 +130,14 @@ $authenticate = new authenticate($_COOKIE['token']);
             var color = colorThief.getColor(document.getElementById('imagem'));
             color = ('rgb(' + color + ')');
 
+            if (lightOrDark(color) == 'dark') {
+                // $('.colorText').animate({'color': 'white'});
+                console.log('kkkkkkkk');
+                $('#nav').css({
+                    'color': 'red'
+                });
+                
+            }
             console.log(color);
 
             $('.colorBack').animate({
@@ -110,8 +152,8 @@ $authenticate = new authenticate($_COOKIE['token']);
     <?php session_unset();
     ?>
 
-    <nav class=''>
-        <div class='nav-wrapper colorBack' style='background:#90caf9'>
+    <nav class='' id='nav'>
+        <div class='nav-wrapper colorBack colorText' style='background:#90caf9'>
             <a href='' class='brand-logo light center grey-text text-darken-3'>FAST JOBS</a>
         </div>
     </nav>
@@ -263,9 +305,9 @@ $authenticate = new authenticate($_COOKIE['token']);
 
             <?php
 
-            $id = $authenticate->getId();
+            $codUser = $authenticate->getId();
             $announcement = new announcement();
-            $announcement->showsannouncementProfile($id);
+            $announcement->showsannouncementProfile($codUser);
 
             ?>
 

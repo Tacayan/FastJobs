@@ -1,4 +1,5 @@
 <?php
-    require 'class/logOff.class.php';
+    require 'class/AccountLogin.class.php';
 
-    $logOff = new logOff();
+    $logOff = new AccountLogin();
+    $logOff -> goingOut();

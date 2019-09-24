@@ -1,7 +1,7 @@
 <?php
 require 'header.php';
-require 'class/authenticate.class.php';
-require 'class/announcement.class.php';
+require 'class/Authenticate.class.php';
+require 'class/Announcement.class.php';
 
 $authenticate = new authenticate($_COOKIE['token']);
 
@@ -10,9 +10,9 @@ $authenticate = new authenticate($_COOKIE['token']);
 <script type='text/javascript'>
     window.onload = function() {
         <?php if (@$_SESSION['notice'] != '') { ?>
-        M.toast({
-            html: '<?php echo $_SESSION['notice'] ?>'
-        });
+            M.toast({
+                html: '<?php echo $_SESSION['notice'] ?>'
+            });
         <?php } ?>
     }
 </script>
@@ -105,9 +105,9 @@ $authenticate = new authenticate($_COOKIE['token']);
 
         <?php
 
-        $userIdAuth = $authenticate->getID();
+        $codUserAuth = $authenticate->getID();
         $announcement = new announcement();
-        $announcement->showsAnnouncement($userIdAuth);
+        $announcement->showsAnnouncement($codUserAuth);
 
         ?>
 

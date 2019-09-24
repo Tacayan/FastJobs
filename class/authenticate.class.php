@@ -1,21 +1,11 @@
 <?php
 require 'database/connection.php';
 
-class authenticate
+class Authenticate
 {
 
     public $erros = array();
-    public $user, $email, $telephone, $sit, $token, $id;
-
-    public function setErros($erros)
-    {
-        $this->erros = $erros;
-    }
-
-    public function getErros()
-    {
-        return $this->erros;
-    }
+    // public $user, $email, $telephone, $sit, $token, $id;
 
     public function setUser($user)
     {
@@ -67,12 +57,12 @@ class authenticate
         return $this->telephone;
     }
 
-    public function setID($id)
+    public function setId($id)
     {
         $this->id = $id;
     }
 
-    public function getID()
+    public function getId()
     {
         return $this->id;
     }
@@ -93,10 +83,10 @@ class authenticate
         $sitToken = substr(base64_decode($_COOKIE['token']), -3);
 
         if (($sit == FALSE) or (strlen($_COOKIE['token'] == '0') or ($this->getSit() != $sitToken))) {
-            $this->$erros[] = 'Token inválido/ Sessão expirada (Faça login ou <a href="register.php">registro </a>)';
+            $this->erros[] = 'Token inválido/ Sessão expirada (Faça login ou <a href="register.php">registro </a>)';
 
-            if (count($this->$erros)) {
-                $_SESSION['error'] = $this->$erros;
+            if (count($this->erros)) {
+                $_SESSION['error'] = $this->erros;
                 header('Location: index.php');
             }
         }
@@ -110,7 +100,7 @@ class authenticate
         $this->setUser($user['name']);
         $this->setEmail($user['email']);
         $this->setTelephone($user['telephone']);
-        $this->setID($user['id']);
+        $this->setId($user['id']);
         $this->setPhoto($user['photo']);
     }
 

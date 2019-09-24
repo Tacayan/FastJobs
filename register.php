@@ -1,6 +1,6 @@
 <?php
     require 'header.php';
-    require 'class/accountRegister.class.php';
+    // require 'class/accountLogin.class.php';
 ?>
 
     <div class="row">
