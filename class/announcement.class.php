@@ -266,16 +266,19 @@ class Announcement
             echo '<ul class="collection">';
 
             foreach ($userFor as $user) {
-                $stmt = $connection->prepare('SELECT name, photo FROM user WHERE id = :codUser');
+                $stmt = $connection->prepare('SELECT name, photo, id FROM user WHERE id = :codUser');
                 $stmt->bindParam(':codUser', $user['codUser']);
                 $stmt->execute();
                 $userInfo = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                echo '<li class="collection-item avatar">
-                <img src="' . $userInfo["photo"] . '" alt="" class="circle">
-                <span class="title">' . $userInfo["name"] . '</span>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-              </li>';
+                foreach ($userInfo as $user) {
+                    echo '<li class="collection-item avatar">
+                    <img src="' . $user["photo"] . '" alt="" class="circle">
+                    <span class="title">' . $user["name"] . '</span>
+                    <a href="user.php/?id='. $user["id"] .'" class="secondary-content right">Visitar Perfil</a><br>
+                    <a class=" btn-flat">Escolher como empregado</a>
+                  </li>';
+                }
             }
             echo '</ul>';
         }

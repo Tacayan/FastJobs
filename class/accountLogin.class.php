@@ -1,5 +1,7 @@
 <?php
 
+require 'resize-class/resize-class.php';
+
 class AccountLogin
 {
 
@@ -165,6 +167,10 @@ class AccountLogin
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+
+        }
 
         $this->setName($user['name']);
         $this->setEmail($user['email']);
