@@ -8,7 +8,7 @@ $codUser = $authenticate->getId();
 
 $showing = new AccountLogin();
 
-$showing->accountShowing($_GET['id']);
+$showing->accountShowing($_GET['id'], $codUser);
 ?>
 
 <!DOCTYPE html>
@@ -31,12 +31,55 @@ $showing->accountShowing($_GET['id']);
 		}
 	</style>
 
-	<script src="../node_modules/colorthief/dist/color-thief.umd.js"></script>
+	<script>
+		function lightOrDark(color) {
+
+			// Variables for red, green, blue values
+			var r, g, b, hsp;
+
+			// Check the format of the color, HEX or RGB?
+			if (color.match(/^rgb/)) {
+
+				// If HEX --> store the red, green, blue values in separate variables
+				color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/);
+
+				r = color[1];
+				g = color[2];
+				b = color[3];
+			} else {
+
+				// If RGB --> Convert it to HEX: http://gist.github.com/983661
+				color = +("0x" + color.slice(1).replace(
+					color.length < 5 && /./g, '$&$&'));
+
+				r = color >> 16;
+				g = color >> 8 & 255;
+				b = color & 255;
+			}
+
+			// HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+			hsp = Math.sqrt(
+				0.299 * (r * r) +
+				0.587 * (g * g) +
+				0.114 * (b * b)
+			);
+
+			// Using the HSP value, determine whether the color is light or dark
+			if (hsp > 127.5) {
+
+				return 'light';
+			} else {
+
+				return 'dark';
+			}
+		}
+	</script>
 
 	<link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
 	<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'>
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
 
 	<link type='text/css' rel='stylesheet' href='../css/style.css'>
 
@@ -48,18 +91,47 @@ $showing->accountShowing($_GET['id']);
 
 </head>
 
+<script type='text/javascript'>
+	function change_placeholder_color(target_class, color_choice) {
+		$("body").append("<style>" + target_class + "::placeholder{color:" + color_choice + "}</style>")
+	}
+
+	window.onload = function() {
+		<?php if (@$_SESSION['announcement'] != '') { ?>
+			M.toast({
+				html: '<?php echo $_SESSION['announcement'] ?>'
+			});
+		<?php } ?>
+
+		var colorThief = new ColorThief();
+		var color = colorThief.getColor(document.getElementById('imagem'));
+		color = ('rgb(' + color + ')');
+
+		if (lightOrDark(color) == 'dark') {
+			$('.colorText').animate({
+				'color': 'white'
+			});
+			change_placeholder_color('.colorTextplace', 'white');
+		} else {
+			$('.colorText').animate({
+				'color': 'black'
+			});
+			change_placeholder_color('.colorTextPlace', 'black');
+		}
+
+		$('.colorBack').animate({
+			backgroundColor: color
+		})
+		$('colorColor').animate({
+			color: color
+		})
+		$('.tap-target').tapTarget('open')
+	};
+</script>
+<?php session_unset();
+?>
+
 <body>
-
-	<div id='edit' class='modal'>
-		<div class='modal-content'>
-			<h4>Perfil</h4>
-
-		</div>
-		<div class='modal-footer'>
-			<a href='#!' class='modal-close btn-flat'>Fechar</a>
-			<button href='#!' type='submit' class='btn-flat'>Salvar</a>
-		</div>
-	</div>
 
 	<div id="candidatos35" class="modal bottom-sheet">
 		<div class="modal-content">
@@ -71,36 +143,16 @@ $showing->accountShowing($_GET['id']);
 		</div>
 	</div>
 
-	<script type='text/javascript'>
-		window.onload = function() {
-			var colorThief = new ColorThief();
-			var color = colorThief.getColor(document.getElementById('imagem'));
-			color = ('rgb(' + color + ')');
-
-			console.log(color);
-
-			$('.colorBack').animate({
-				backgroundColor: color
-			})
-			$('colorColor').animate({
-				color: color
-			})
-			$('.tap-target').tapTarget('open')
-		};
-	</script>
-	<?php session_unset();
-	?>
-
 	<nav class=''>
 		<div class='nav-wrapper colorBack' style='background:#90caf9'>
-			<a href='' class='brand-logo light center grey-text text-darken-3'>FAST JOBS</a>
+			<a href='' class='brand-logo light center colorText'>FAST JOBS</a>
 		</div>
 	</nav>
 
-	<div class="tap-target colorBack" data-target="backbutton">
+	<div class="tap-target colorBack colorText" data-target="backbutton">
 		<div class="tap-target-content">
-			<h5>Caralho parcero</h5>
-			<p>que volta? so clica nessa porra</p>
+			<h5>Olá</h5>
+			<p>Use este botão para voltar a home</p>
 		</div>
 	</div>
 
@@ -133,35 +185,35 @@ $showing->accountShowing($_GET['id']);
 
 		<div class='col s3'>
 			<div class='card hoverable colorBack' style='background:#90caf9'>
-				<div class='card-content black-text'>
-					<span class='card-title'>Melhores Usuários <span class='right'>:)</span></span>
+				<div class='card-content'>
+					<span class='card-title colorText'>Melhores Usuários <span class='right'>:)</span></span>
 
 				</div>
 				<ul class='collection'>
 
 					<li class='collection-item avatar'>
-						<img src='https://instagram.fcgh11-1.fna.fbcdn.net/vp/fe6aa5337b36bce7ae8e417d65b600d8/5E05F285/t51.2885-19/s150x150/67727803_408078650067138_1975367184414670848_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net' alt='' class='circle'>
+						<img src='../users/photos/cintia.jpg' alt='' class='circle'>
 						<span class='title'>Cintia Barbosa</span>
 						<p><i class='material-icons tiny yellow-text'>grade</i>5.01
 						</p>
 					</li>
 
 					<li class='collection-item avatar'>
-						<img src='https://instagram.fcgh11-1.fna.fbcdn.net/vp/79ce45847126e1776511183de150d650/5E050D07/t51.2885-19/s150x150/66673162_373444230236014_7726763035859091456_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net' alt='' class='circle'>
-						<span class='title'>Tatsuya ♥</span>
+						<img src='../users/photos/julia.jpg' alt='' class='circle'>
+						<span class='title'>Julia</span>
 						<p><i class='material-icons tiny yellow-text'>grade</i>5.01
 						</p>
 					</li>
 
 					<li class='collection-item avatar'>
-						<img src='https://instagram.fcgh11-1.fna.fbcdn.net/vp/3b8ed41235bcb2553392a35b75672d35/5DD9AD6C/t51.2885-15/e35/66657108_148711989558252_9147901568124242713_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net' alt='' class='circle'>
+						<img src='../users/photos/daniel.jpg' alt='' class='circle'>
 						<span class='title'>Daniel Oliveira</span>
 						<p><i class='material-icons tiny yellow-text'>grade</i>4.97
 						</p>
 					</li>
 
 					<li class='collection-item avatar'>
-						<img src='https://instagram.faep3-1.fna.fbcdn.net/vp/555cd2f07be894f73fd54d6c13df2649/5D8BC2D4/t51.2885-19/s150x150/57506563_326204114734809_8641339389118513152_n.jpg?_nc_ht=instagram.faep3-1.fna.fbcdn.net' alt='' class='circle'>
+						<img src='../users/photos/matheus.jpg' alt='' class='circle'>
 						<span class='title'>Matheus Magalhães</span>
 						<p><i class='material-icons tiny yellow-text'>grade</i>4.95
 						</p>
@@ -171,8 +223,8 @@ $showing->accountShowing($_GET['id']);
 						<div class='nav-wrapper colorBack' style='background:#90caf9'>
 							<form>
 								<div class='input-field'>
-									<input id='search' type='search' placeholder='Pesquisar Usuário' required>
-									<label class='label-icon' for='search'><i class='material-icons black-text'>search</i>Pesquisar Usuário</label>
+									<input class="colorTextPlace" id='search' type='search' placeholder='Pesquisar Usuário' required>
+									<label class='label-icon' for='search'><i class='material-icons colorText'>search</i>Pesquisar Usuário</label>
 									<i class='material-icons'>close</i>
 								</div>
 							</form>
@@ -184,14 +236,33 @@ $showing->accountShowing($_GET['id']);
 
 		<div class='col s7'>
 
-			<div class='card-panel col s12 colorBack' style='background:#90caf9'><br>
-				<div class='center'><img id='imagem' src='../<?php echo $showing->getPhoto(); ?>' class='circle z-depth-5' height='200' width='200'></div>
-				<div class='card z-depth-5'><br>
-					<h4 class='light center'> <?php echo $showing->getName(); ?> </h4><br>
-					<h6 class='light center col s6'> <?php echo $showing->getEmail(); ?> </h6>
-					<h6 class='light center col s6'> <?php echo $showing->getTelephone(); ?> </h6><br><br><br>
+			<?php
+			if ($showing->getUserFound()) {
+				?>
+
+				<div class='card-panel col s12 colorBack' style='background:#90caf9'><br>
+					<div class='center'><img id='imagem' src='../<?php echo $showing->getPhoto(); ?>' class='circle z-depth-5' height='200' width='200'></div>
+					<div class='card z-depth-5'><br>
+						<h4 class='light center'> <?php echo $showing->getName(); ?> </h4><br>
+						<h6 class='light center col s6'> <?php echo $showing->getEmail(); ?> </h6>
+						<h6 class='light center col s6'> <?php echo $showing->getTelephone(); ?> </h6><br><br><br>
+					</div>
 				</div>
-			</div>
+
+			<?php
+			} else {
+				?>
+
+				<div class='card-panel col s12 colorBack' style='background:#90caf9'><br>
+					<div class='center'><img id='imagem' src='../users/photos/Person.jpg' class='circle z-depth-5' height='200' width='200'></div>
+					<div class='card z-depth-5'><br>
+						<h4 class='light center'>Usuário não encontrado</h4><br>
+					</div>
+				</div>
+
+			<?php
+			}
+			?>
 
 			<!-- <div class='card col s12'>
                 <div class='card-content black-text'>
@@ -251,9 +322,9 @@ $showing->accountShowing($_GET['id']);
 
 		<div class='col s2 hide-on-med-and-down right'>
 			<div class='card'>
-				<div class='card-content black-text colorBack' style='background:#90caf9'>
-					<span class='card-title center h6'>publicidade</span>
-					<span class='h3'> AUMENTO PENIANO E BLBABLABALBALBA </span>
+				<div class='card-content colorBack colorText' style='background:#90caf9'>
+					<span class='card-title center h6'> </span>
+					<span class='h3'> </span>
 					<br>
 					<br>
 					<br>
@@ -286,15 +357,15 @@ $showing->accountShowing($_GET['id']);
 
 	<div class='fixed-action-btn right'>
 		<a href='../home.php' class='btn-floating btn-large colorBack' id='backbutton' style='background:#ef9a9a'>
-			<i class='large material-icons black-text'>arrow_back</i>
+			<i class='large material-icons colorText'>arrow_back</i>
 		</a>
 	</div>
-	<footer style='background:#90caf9' class='page-footer grey-text text-darken-4 footer colorBack'>
+	<footer style='background:#90caf9' class='page-footer footer colorBack colorText'>
 		<div class='container'>
 			<div class='row'>
 				<div class='col s12'>
 					<h5 class='light'>FAST JOBS</h5>
-					<p class=''>Created and maintained by BlueCODE|</p>
+					<p class=''> Criado e mantido por BlueCODE|</p>
 				</div>
 			</div>
 		</div>
@@ -333,7 +404,7 @@ $showing->accountShowing($_GET['id']);
 			});
 		}
 
-		localStorage.setItem('viewed', 'true');
+		localStorage.setItem('viewed', 'TRUE');
 	</script>
 
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>

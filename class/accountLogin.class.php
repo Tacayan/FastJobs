@@ -67,6 +67,16 @@ class AccountLogin
         return $this->photo;
     }
 
+    public function setUserFound($userFound)
+    {
+        $this->userFound = $userFound;
+    }
+
+    public function getUserFound()
+    {
+        return $this->userFound;
+    }
+
     public function loggingIn()
     {
 
@@ -149,7 +159,7 @@ class AccountLogin
             $stmt->bindParam(':telephone', $_POST['telephone']);
 
             if ($stmt->execute()) {
-                $_SESSION['rnotice'] = '<div class="btn white black-text">Registrado com sucesso!</div>';
+                $_SESSION['notice'] = '<div class="btn white black-text">Registrado com sucesso!</div>';
                 header('Location: index.php');
             } else {
                 header('Location: register.php');
@@ -160,7 +170,7 @@ class AccountLogin
         }
     }
 
-    public function accountShowing($id)
+    public function accountShowing($id, $myself)
     {
         $connection = GetConnection();
         $stmt = $connection->prepare('SELECT name, email, telephone, photo FROM user WHERE id = :id');
@@ -168,9 +178,13 @@ class AccountLogin
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$user) {
+        if (!$user)
+            $this->setUserFound(0);
+         else
+            $this->setUserFound(1);
 
-        }
+        if ($id === $myself)
+            header('Location: ../profile.php');
 
         $this->setName($user['name']);
         $this->setEmail($user['email']);

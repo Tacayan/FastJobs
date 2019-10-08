@@ -142,8 +142,8 @@ class Announcement
 
         if (!count($announcement)) {
             echo "<div class='card col s12 colorBack'>
-            <div class='card-content black-text'>
-                <span class='card-title center'>Nada a exibir</span>
+            <div class='card-content'>
+                <span class='card-title center colorText'>Nada para exibir</span>
             </div>
         </div>";
         }
@@ -159,7 +159,7 @@ class Announcement
             if ($userVerify) {
                 echo '<div class="col s12">
                 <div class="card "> 
-            <div class="card-content black-text colorBack"> 
+            <div class="card-content colorBack colorText"> 
             <div class="chip right">Função- anuncio</div> 
             <span class="card-title light"> ' . $announcement["title"] . ' </span> 
             <p class="" style="text-align: justify;"> ' .  $announcement["description"] . ' </p> 
@@ -210,8 +210,8 @@ class Announcement
 
         if (!count($announcement)) {
             echo "<div class='card col s12 colorBack'>
-            <div class='card-content black-text'>
-                <span class='card-title center'>Nada a exibir</span>
+            <div class='card-content colorText'>
+                <span class='card-title center'>Nada para exibir</span>
             </div>
         </div>";
         }
@@ -230,7 +230,7 @@ class Announcement
             <p class="green-text text-darken-3">R$ ' . $announcement["payment"] . '</p> </div> 
             <div class="card-action col s12 grey lighten-3"> 
             <a class="btn black-text col s12 white modal-trigger" href="#candidatos' . $announcement["id"] . '"><i class="left material-icons tiny ">list</i>Candidatos(+99)</a><br><br>
-            <a class="btn black-text col s12 colorBack" href="deletingAnnouncement.php?id=' . $announcement["id"] . '">Excluir<i class="left material-icons tiny ">delete</i></a><br><br> 
+            <a class="btn colorText col s12 colorBack" href="deletingAnnouncement.php?id=' . $announcement["id"] . '">Excluir<i class="left material-icons tiny colorText">delete</i></a><br><br> 
             </div> 
             </div>
             </div>
@@ -275,7 +275,7 @@ class Announcement
                     echo '<li class="collection-item avatar">
                     <img src="' . $user["photo"] . '" alt="" class="circle">
                     <span class="title">' . $user["name"] . '</span>
-                    <a href="user.php/?id='. $user["id"] .'" class="secondary-content right">Visitar Perfil</a><br>
+                    <a href="user.php/?id='. $user["id"] .'" class="secondary-content right colorColor">Visitar Perfil</a><br>
                     <a class=" btn-flat">Escolher como empregado</a>
                   </li>';
                 }

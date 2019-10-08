@@ -11,6 +11,20 @@ $authenticate = new authenticate($_COOKIE['token']);
 
 <head>
 
+    <style>
+        .imagem figure img {
+            -webkit-filter: grayscale(0) blur(0);
+            filter: grayscale(0) blur(0);
+            -webkit-transition: .3s ease-in-out;
+            transition: .3s ease-in-out;
+        }
+
+        .imagem figure:hover img {
+            -webkit-filter: grayscale(100%) blur(3px);
+            filter: grayscale(100%) blur(3px);
+        }
+    </style>
+
     <script>
         function lightOrDark(color) {
 
@@ -70,12 +84,11 @@ $authenticate = new authenticate($_COOKIE['token']);
         }
     </style>
 
-    <script src="node_modules/colorthief/dist/color-thief.umd.js"></script>
-
     <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
 
     <link type='text/css' rel='stylesheet' href='css/style.css'>
 
@@ -86,6 +99,46 @@ $authenticate = new authenticate($_COOKIE['token']);
     <title>Fast Jobs</title>
 
 </head>
+
+<script type='text/javascript'>
+    function change_placeholder_color(target_class, color_choice) {
+        $("body").append("<style>" + target_class + "::placeholder{color:" + color_choice + "}</style>")
+    }
+
+    window.onload = function() {
+        <?php if (@$_SESSION['announcement'] != '') { ?>
+            M.toast({
+                html: '<?php echo $_SESSION['announcement'] ?>'
+            });
+        <?php } ?>
+
+        var colorThief = new ColorThief();
+        var color = colorThief.getColor(document.getElementById('imagem'));
+        color = ('rgb(' + color + ')');
+
+        if (lightOrDark(color) == 'dark') {
+            $('.colorText').animate({
+                'color': 'white'
+            });
+            change_placeholder_color('.colorTextplace', 'white');
+        } else {
+            $('.colorText').animate({
+                'color': 'black'
+            });
+            change_placeholder_color('.colorTextPlace', 'black');
+        }
+
+        $('.colorBack').animate({
+            backgroundColor: color
+        })
+        $('colorColor').animate({
+            color: color
+        })
+        $('.tap-target').tapTarget('open')
+    };
+</script>
+<?php session_unset();
+?>
 
 <body>
 
@@ -101,7 +154,7 @@ $authenticate = new authenticate($_COOKIE['token']);
                 </div>
 
                 <div class="file-field input-field">
-                    <div class="btn colorBack black-text">
+                    <div class="btn colorBack colorText">
                         <span>Foto de perfil</span>
                         <input name="photo" type="file" multiple>
                     </div>
@@ -118,59 +171,25 @@ $authenticate = new authenticate($_COOKIE['token']);
         </div>
     </div>
 
-    <script type='text/javascript'>
-        window.onload = function() {
-            <?php if (@$_SESSION['announcement'] != '') { ?>
-                M.toast({
-                    html: '<?php echo $_SESSION['announcement'] ?>'
-                });
-            <?php } ?>
-
-            var colorThief = new ColorThief();
-            var color = colorThief.getColor(document.getElementById('imagem'));
-            color = ('rgb(' + color + ')');
-
-            if (lightOrDark(color) == 'dark') {
-                // $('.colorText').animate({'color': 'white'});
-                console.log('kkkkkkkk');
-                $('#nav').css({
-                    'color': 'red'
-                });
-                
-            }
-            console.log(color);
-
-            $('.colorBack').animate({
-                backgroundColor: color
-            })
-            $('colorColor').animate({
-                color: color
-            })
-            $('.tap-target').tapTarget('open')
-        };
-    </script>
-    <?php session_unset();
-    ?>
-
     <nav class='' id='nav'>
-        <div class='nav-wrapper colorBack colorText' style='background:#90caf9'>
-            <a href='' class='brand-logo light center grey-text text-darken-3'>FAST JOBS</a>
+        <div class='nav-wrapper colorBack' style='background:#90caf9'>
+            <a href='' class='brand-logo light center colorText'>FAST JOBS</a>
         </div>
     </nav>
 
-    <div class="tap-target colorBack" data-target="backbutton">
+    <div class="tap-target colorBack colorText" data-target="backbutton">
         <div class="tap-target-content">
-            <h5>Caralho parcero</h5>
-            <p>que volta? so clica nessa porra</p>
+            <h5>Olá</h5>
+            <p>Use este botão para voltar a home</p>
         </div>
     </div>
 
-    <style>
+    <!-- <style>
         #search::-webkit-input-placeholder {
             color: #000;
             font-style: bold;
         }
-    </style>
+    </style> -->
 
     <ul id='dropdown1' class='dropdown-content'>
         <li><a href='profile.php' class='grey-text text-darken-3 disabled'>Meu Perfil</a></li>
@@ -195,34 +214,34 @@ $authenticate = new authenticate($_COOKIE['token']);
         <div class='col s3'>
             <div class='card hoverable colorBack' style='background:#90caf9'>
                 <div class='card-content black-text'>
-                    <span class='card-title'>Melhores Usuários <span class='right'>:)</span></span>
+                    <span class='card-title colorText'>Melhores Usuários <span class='right'>:)</span></span>
 
                 </div>
                 <ul class='collection'>
 
                     <li class='collection-item avatar'>
-                        <img src='https://instagram.fcgh11-1.fna.fbcdn.net/vp/fe6aa5337b36bce7ae8e417d65b600d8/5E05F285/t51.2885-19/s150x150/67727803_408078650067138_1975367184414670848_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net' alt='' class='circle'>
+                        <img src='../users/photos/cintia.jpg' alt='' class='circle'>
                         <span class='title'>Cintia Barbosa</span>
                         <p><i class='material-icons tiny yellow-text'>grade</i>5.01
                         </p>
                     </li>
 
                     <li class='collection-item avatar'>
-                        <img src='https://instagram.fcgh11-1.fna.fbcdn.net/vp/79ce45847126e1776511183de150d650/5E050D07/t51.2885-19/s150x150/66673162_373444230236014_7726763035859091456_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net' alt='' class='circle'>
-                        <span class='title'>Tatsuya ♥</span>
+                        <img src='../users/photos/julia.jpg' alt='' class='circle'>
+                        <span class='title'>Julia</span>
                         <p><i class='material-icons tiny yellow-text'>grade</i>5.01
                         </p>
                     </li>
 
                     <li class='collection-item avatar'>
-                        <img src='https://instagram.fcgh11-1.fna.fbcdn.net/vp/3b8ed41235bcb2553392a35b75672d35/5DD9AD6C/t51.2885-15/e35/66657108_148711989558252_9147901568124242713_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net' alt='' class='circle'>
+                        <img src='../users/photos/daniel.jpg' alt='' class='circle'>
                         <span class='title'>Daniel Oliveira</span>
                         <p><i class='material-icons tiny yellow-text'>grade</i>4.97
                         </p>
                     </li>
 
                     <li class='collection-item avatar'>
-                        <img src='https://instagram.faep3-1.fna.fbcdn.net/vp/555cd2f07be894f73fd54d6c13df2649/5D8BC2D4/t51.2885-19/s150x150/57506563_326204114734809_8641339389118513152_n.jpg?_nc_ht=instagram.faep3-1.fna.fbcdn.net' alt='' class='circle'>
+                        <img src='../users/photos/matheus.jpg' alt='' class='circle'>
                         <span class='title'>Matheus Magalhães</span>
                         <p><i class='material-icons tiny yellow-text'>grade</i>4.95
                         </p>
@@ -232,8 +251,8 @@ $authenticate = new authenticate($_COOKIE['token']);
                         <div class='nav-wrapper colorBack' style='background:#90caf9'>
                             <form>
                                 <div class='input-field'>
-                                    <input id='search' type='search' placeholder='Pesquisar Usuário' required>
-                                    <label class='label-icon' for='search'><i class='material-icons black-text'>search</i>Pesquisar Usuário</label>
+                                    <input class="colorTextPlace" id='search' type='search' placeholder='Pesquisar Usuário' required>
+                                    <label class='label-icon' for='search'><i class='material-icons colorText'>search</i>Pesquisar Usuário</label>
                                     <i class='material-icons'>close</i>
                                 </div>
                             </form>
@@ -246,7 +265,7 @@ $authenticate = new authenticate($_COOKIE['token']);
         <div class='col s7'>
 
             <div class='card-panel col s12 colorBack' style='background:#90caf9'><br>
-                <div class='center'><img id='imagem' src='<?php echo $authenticate->getPhoto(); ?>' class='circle z-depth-5' height='200' width='200'></div>
+                <div class='center'><img id='imagem' src='<?php echo $authenticate->getPhoto(); ?>' class='circle z-depth-5 blur' height='200' width='200'></div>
                 <div class='card'><br>
                     <h4 class='light center'> <?php echo $authenticate->getUser(); ?> </h4><br>
                     <h6 class='light center col s6'> <?php echo $authenticate->getEmail(); ?> </h6>
@@ -315,9 +334,9 @@ $authenticate = new authenticate($_COOKIE['token']);
 
         <div class='col s2 hide-on-med-and-down right'>
             <div class='card'>
-                <div class='card-content black-text colorBack' style='background:#90caf9'>
-                    <span class='card-title center h6'>publicidade</span>
-                    <span class='h3'> AUMENTO PENIANO E BLBABLABALBALBA </span>
+                <div class='card-content colorText colorBack' style='background:#90caf9'>
+                    <span class='card-title center h6'> </span>
+                    <span class='h3'>   </span>
                     <br>
                     <br>
                     <br>
@@ -350,15 +369,15 @@ $authenticate = new authenticate($_COOKIE['token']);
 
     <div class='fixed-action-btn right'>
         <a href='home.php' class='btn-floating btn-large colorBack' id='backbutton' style='background:#ef9a9a'>
-            <i class='large material-icons black-text'>arrow_back</i>
+            <i class='large material-icons colorText'>arrow_back</i>
         </a>
     </div>
-    <footer style='background:#90caf9' class='page-footer grey-text text-darken-4 footer colorBack'>
+    <footer style='background:#90caf9' class='page-footer colorText footer colorBack'>
         <div class='container'>
             <div class='row'>
                 <div class='col s12'>
                     <h5 class='light'>FAST JOBS</h5>
-                    <p class=''>Created and maintained by BlueCODE|</p>
+                    <p class=''> Criado e mantido por BlueCODE|</p>
                 </div>
             </div>
         </div>
@@ -396,11 +415,6 @@ $authenticate = new authenticate($_COOKIE['token']);
                 $('.tap-target').tapTarget();
             });
         }
-
-        // if (localStorage.getItem('photoChanged')){
-        //     alert('kkkkktrouxa');
-        //     localStorage.removeItem('photoChanged');
-        // }
 
         localStorage.setItem('viewed', 'TRUE');
     </script>
